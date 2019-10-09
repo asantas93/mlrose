@@ -147,8 +147,8 @@ def head(_b, _x):
     _head = 0
 
     # Iterate through values in vector
-    for i in _x:
-        if i == _b:
+    for bit in _x:
+        if bit == _b:
             _head += 1
         else:
             break
@@ -177,8 +177,8 @@ def tail(_b, _x):
     _tail = 0
 
     # Iterate backwards through values in vector
-    for i in range(len(_x)):
-        if _x[len(_x) - i - 1] == _b:
+    for bit in reversed(_x):
+        if bit == _b:
             _tail += 1
         else:
             break
@@ -297,7 +297,7 @@ class FourPeaks:
         head_1 = head(1, state)
 
         # Calculate R(X, T)
-        if (tail_0 > _t and head_1 > _t):
+        if tail_0 > _t and head_1 > _t:
             _r = _n
         else:
             _r = 0
@@ -903,15 +903,11 @@ class MaxKColor:
 
     def __init__(self, edges):
 
-        # Remove any duplicates from list
         self.neighbors = {}
         for v1, v2 in edges:
             if v1 not in self.neighbors:
                 self.neighbors[v1] = set()
-            if v2 not in self.neighbors:
-                self.neighbors[v2] = set()
             self.neighbors[v1].add(v2)
-            self.neighbors[v2].add(v1)
         self.prob_type = 'discrete'
 
     def evaluate(self, state):
@@ -932,8 +928,7 @@ class MaxKColor:
 
         for v, color in enumerate(state):
             # Check that all adjacent nodes are different color
-            if all(state[neighbor] != color for neighbor in self.neighbors.get(v, set())):
-                fitness += 1
+            fitness += sum(int(state[neighbor] != color) for neighbor in self.neighbors.get(v, set()))
 
         return fitness
 
